@@ -1,0 +1,12 @@
+{
+    "name": "easybib/asset-php",
+    "description": "Prefixing files with a content MD5, as a composer script.",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Richard Wossal",
+            "email": "richard.wossal@imagineeasy.com"
+        }
+    ],
+    "require": {}
+}
