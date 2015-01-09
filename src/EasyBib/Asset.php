@@ -19,7 +19,7 @@ class Asset
     private static $event;
 
     /**
-     * Prefix the files with the md5 hash.
+     * Prefix the files with the md5 hash. Run as a composer script.
      */
     public static function run(Event $event)
     {
@@ -50,6 +50,14 @@ class Asset
             self::out('Asset: Error: ' . $e->getMessage());
 
         }
+    }
+
+    /**
+     * Delete the file map, fall back to source files again. Run as a composer script.
+     */
+    public static function clear(Event $event)
+    {
+        throw new \Exception('TODO: clear not implemented yet'); // XXX
     }
 
     /**

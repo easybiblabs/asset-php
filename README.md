@@ -13,9 +13,9 @@ Prefixing files with a content MD5, as a composer script.
 
 ## Setup/Usage
 
-1. `$ composer require easybib/asset-php 1.\*`
+* `$ composer require easybib/asset-php 1.\*`
 
-2. Add the needed configuration in your composer.json
+* Add the needed configuration in your composer.json
 
 For example:
 
@@ -31,13 +31,14 @@ For example:
 This will copy the files `web/js/main.js` to something like `dist/js/2132121abcf13223-main.js`,
 and `web/css/main.css` to something like `dist/css/2132121abcf13223-main.js`.
 
-3. Register it as some kind of script in your composer.json
+* Register it as some kind of script in your composer.json
 
 For example, to let it run when you do `composer build`:
 
 ```json
     "scripts": {
-        "build": "EasyBib\\Asset::run"
+        "build": "EasyBib\\Asset::run",
+        "clear-build": "EasyBib\\Asset::clear"
     },
 ```
 
@@ -45,11 +46,15 @@ Composer also has some [magic script names](https://getcomposer.org/doc/articles
 that it triggers automatically. The following would make it run after every `composer install`:
 ```json
     "scripts": {
-        "post-install-cmd": "EasyBib\\Asset::run"
+        "post-install-cmd": "EasyBib\\Asset::run",
+        "clear-build": "EasyBib\\Asset::clear"
     },
 ```
 
-4. In your app, replace the path to the file with a call to `EasyBib\Asset::path`.
+The `clear` command deletes the current mapping and will make the app fall back to
+the source file.
+
+* In your app, replace the path to the file with a call to `EasyBib\Asset::path`.
 
 For example, with the above configuration, the following
 ```php
@@ -60,4 +65,4 @@ Will expand into
     <script src="/js/123abcdwhatever-main.js"></script>
 ```
 iff you ran `Easybib\Asset::run`. If you didn't run it, or if it doesn't know about that
-file it will just return `/js/main.js`.
+file it will fall-back to just `/js/main.js`.
