@@ -8,5 +8,10 @@
             "email": "richard.wossal@imagineeasy.com"
         }
     ],
+    "autoload": {
+        "psr-0": {
+            "": "src/"
+        }
+    },
     "require": {}
 }
