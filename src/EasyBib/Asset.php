@@ -122,8 +122,9 @@ class Asset
      *
      * @return map of (original name => hash-prefixed name)
      */
-    private static function copyFiles($targetPath, $sourcePath, $files) {
-        $prefixedNames = array();
+    private static function copyFiles($targetPath, $sourcePath, $files)
+    {
+        $prefixedNames = [];
         foreach ($files as $sourceName) {
 
             $prefixedName = sprintf(
@@ -134,7 +135,7 @@ class Asset
             );
             copy($sourcePath . $sourceName, $targetPath . '/' . $prefixedName);
             self::out(sprintf("\t% -30s -> %s", $sourceName, $prefixedName));
-            $prefixedNames[$sourceName] = '/' . $prefixedName;
+            $prefixedNames[$sourceName] = $prefixedName;
         }
         return $prefixedNames;
     }
