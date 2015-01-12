@@ -32,17 +32,13 @@ For example:
         }
     },
     "scripts": {
-        "build": "EasyBib\\Asset::run",
-        "clear-build": "EasyBib\\Asset::clear"
+        "build": "EasyBib\\Asset::run"
     },
 ```
 
 You can choose other script names, of course. Composer also has some [magic
 script names](https://getcomposer.org/doc/articles/scripts.md#event-names) that
 it triggers automatically.
-
-The `clear` command deletes the current mapping and will make the app fall back
-to the source file.
 
 ### app
 
@@ -56,5 +52,8 @@ Will expand into
 ```php
     <script src="/js/123abcdwhatever-main.js"></script>
 ```
-once you ran `composer build`. It will fall-back to `/js/main.js` when you
-ran `composer clear-build`.
+once you ran `composer build`.
+
+To make it fall-back to the source file, you can run `EasyBib\Asset::clear()`.
+But because of how the APC works in PHP, you'll have to run that from within
+the app (or at least using the same SAPI).
