@@ -53,9 +53,9 @@ class Asset
     }
 
     /**
-     * Delete the file map, fall back to source files again. Run as a composer script.
+     * Delete the file map, fall back to source files again.
      */
-    public static function clear(Event $event)
+    public static function clear()
     {
         apc_delete('asset-file-map');
         if (is_file(__DIR__ . '/asset-file-map.php')) {
