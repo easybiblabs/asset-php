@@ -3,7 +3,7 @@
  * Imagine Easy Solutions LLC Copyright 2013-2015
  * MIT License, see the file called LICENSE for details.
  *
- * @author   Richard Wossal <richard.wossal@imagineeasy.com>
+ * @author Richard Wossal <richard.wossal@imagineeasy.com>
  */
 namespace EasyBib;
 
@@ -57,7 +57,10 @@ class Asset
      */
     public static function clear(Event $event)
     {
-        throw new \Exception('TODO: clear not implemented yet'); // XXX
+        apc_delete('asset-file-map');
+        if (is_file(__DIR__ . '/asset-file-map.php')) {
+            unlink(__DIR__ . '/asset-file-map.php');
+        }
     }
 
     /**
