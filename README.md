@@ -26,14 +26,18 @@ For example:
 ```json
     "config": {
         "asset": {
-            "sourcePath": "web",
-            "targetPath": "dist",
-            "files": ["/js/main.js", "/css/main.css"]
+            "/js/main.js": {"from": "frontend/src", "to": "frontend/dist"},
+            "/css/main.css": {"from": "web/css", "to": "web/css"}
         }
     },
     "scripts": {
         "build": "EasyBib\\Asset::run"
     },
+```
+
+The `config.asset` syntax is as follows:
+```
+    "the name you call Asset::path() with" => {from: "source directory", to: "target directory"}
 ```
 
 You can choose other script names, of course. Composer also has some [magic
