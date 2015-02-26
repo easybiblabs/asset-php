@@ -24,32 +24,34 @@ class Asset
     public static function run(Event $event)
     {
         self::$event = $event;
-        $config = $event->getComposer()->getConfig();
-        $assetConfig = $config->get('asset');
+        $assetConfig = $event->getComposer()->getConfig()->get('asset');
 
-        try {
+        self::out('Asset: Copying files');
+        $prefixedFiles = [];
+        foreach ($assetConfig as $nameUsedByApp => $moveConfig) {
+            try {
 
-            $sourcePath = $assetConfig['sourcePath'];
-            $targetPath = $assetConfig['targetPath'];
+                $sourcePath = $moveConfig['from'];
+                $targetPath = $moveConfig['to'];
 
-            $fileUtil = new FileUtil();
-            $fileUtil->ensureDirectoryExists($sourcePath);
-            $fileUtil->ensureDirectoryExists($targetPath);
+                $fileUtil = new FileUtil();
+                $fileUtil->ensureDirectoryExists($sourcePath);
+                $fileUtil->ensureDirectoryExists($targetPath);
 
-            self::out('Asset: Copying files');
-            self::out("       from $sourcePath to $targetPath");
-            $prefixedFiles  = self::copyFiles($targetPath, $sourcePath, $assetConfig['files']);
-            self::out('Asset: Dumping assets file map');
-            self::dumpFileMap($prefixedFiles);
-            self::out('Asset: Done');
+                self::out("       $nameUsedByApp from $sourcePath to $targetPath");
+                $prefixedFiles[$nameUsedByApp] = self::copyFile($nameUsedByApp, $sourcePath, $targetPath);
 
-        } catch (\Exception $e) {
+            } catch (\Exception $e) {
 
-            // We fail silently in order to not break the install/deployment.
-            // The app will still work, even if the compiled files aren't there.
-            self::out('Asset: Error: ' . $e->getMessage());
+                // We fail silently in order to not break the install/deployment.
+                // The app will still work, even if the compiled files aren't there.
+                self::out('Asset: Error: ' . $e->getMessage());
 
+            }
         }
+        self::out('Asset: Dumping assets file map');
+        self::dumpFileMap($prefixedFiles);
+        self::out('Asset: Done');
     }
 
     /**
@@ -116,27 +118,21 @@ class Asset
 
 
     /**
-     * @param string $targetPath
+     * @param string $nameUsedByApp
      * @param string $sourcePath
-     * @param array  $files
+     * @param string $targetPath
      *
-     * @return map of (original name => hash-prefixed name)
+     * @return string (hash-prefixed name)
      */
-    private static function copyFiles($targetPath, $sourcePath, $files)
+    private static function copyFile($nameUsedByApp, $sourcePath, $targetPath)
     {
-        $prefixedNames = [];
-        foreach ($files as $sourceName) {
-
-            $prefixedName = sprintf(
-                '%s/%s-%s',
-                dirname($sourceName),
-                md5_file($sourcePath . $sourceName),
-                basename($sourceName)
-            );
-            copy($sourcePath . $sourceName, $targetPath . '/' . $prefixedName);
-            self::out(sprintf("\t% -30s -> %s", $sourceName, $prefixedName));
-            $prefixedNames[$sourceName] = $prefixedName;
-        }
-        return $prefixedNames;
+        $filename = basename($nameUsedByApp);
+        $prefixedName = sprintf(
+            '%s-%s',
+            md5_file($sourcePath . '/' . $filename),
+            $filename
+        );
+        copy($sourcePath . '/' . $filename, $targetPath . '/' . $prefixedName);
+        return $prefixedName;
     }
 }
