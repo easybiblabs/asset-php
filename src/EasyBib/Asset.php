@@ -133,6 +133,6 @@ class Asset
             $filename
         );
         copy($sourcePath . '/' . $filename, $targetPath . '/' . $prefixedName);
-        return $prefixedName;
+        return dirname($nameUsedByApp) . '/' . $prefixedName;
     }
 }
